@@ -1,0 +1,46 @@
+tags: $:/tags/Commander/Macro
+title: $:/plugins/kookma/commander/snr/macros/list-inputs
+type: text/vnd.tiddlywiki
+
+\define snr-list-ui-inputs()
+<form class="cmd-snr-form">
+  <fieldset>
+   <legend>Search and Replace by List</legend>
+
+<div class="item">
+<label>Tiddler title</label>
+<$select tiddler="$:/state/commander/snr/select-tiddler" default="" class="cmd-snr-textbox">
+<option value="">None</option>
+<$list filter="[subfilter<searchfilter>]" >
+<option value=<<currentTiddler>>><$text text=<<currentTiddler>>/></option>
+</$list>
+</$select>
+</div>
+
+<div class="item">
+<label>Field name</label>
+<$select tiddler="$:/state/commander/snr/select-tiddler/field" default="text">
+<$list filter="[subfilter<searchfilter>fields[]]">
+<option value=<<currentTiddler>>><$text text=<<currentTiddler>>/></option>
+</$list>
+</$select>
+</div>
+
+<div class="item">
+<label>Title of Tiddler with List</label>
+<$edit-text 
+   tiddler="$:/state/commander/snr/snr-list-title" 
+   tag="input" 
+   default="" 
+   placeholder="list's tiddler title"
+ class="cmd-snr-textbox"/>
+</div>
+<!-- Use relink to update titles -->
+<$list filter="[[$:/state/commander/snr/select-tiddler/field]get[text]match[title]]" variable=ignore>
+<div class="item-relink">{{$:/plugins/kookma/commander/config/relink}}</div>
+</$list>
+</fieldset>
+</form>
+
+
+\end

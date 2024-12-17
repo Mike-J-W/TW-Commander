@@ -1,0 +1,65 @@
+tags: $:/tags/Commander/Macro
+title: $:/plugins/kookma/commander/snr/macros/replace-many-text
+type: text/vnd.tiddlywiki
+
+\define nothing-to-replace(tiddler, field:"text")  
+<$diff-text source={{{ [<__tiddler__>get<__field__>] }}} dest={{{ [<__tiddler__>get<__field__>] }}} />
+\end
+
+\define replace-many-text(tiddler:"",field:"text",list:"",flags:"", wholeWords:"")
+\whitespace trim
+<$wikify name="source" text="""<$view tiddler=<<__tiddler__>> field=<<__field__>> mode="block" format="text"/>""">
+<$set name="listText" filter="[title<__list__>get[text]]">
+<$wikify name="result" 
+  text="""<$macrocall $name="regexpsubmany" $type="text/plain" 
+     sourceText=<<source>> 
+     listText=<<listText>>
+     flags=<<__flags__>> 
+     wholeWords=<<__wholeWords__>> />""" 
+     >
+<$text text=<<result>>/>
+</$wikify>
+</$set>
+</$wikify>
+\end
+
+\define replace-many-text-diff(tiddler:"", field:"text", list:"", flags:"", wholeWords:"")
+<$list filter="[<__tiddler__>get<__field__>minlength[1]]" variable=null emptyMessage="No tiddler is selected, or tiddler is empty.">
+<$list filter="[title<__list__>get[text]minlength[1]]" variable=null emptyMessage=<<nothing-to-replace """$tiddler$""" """$field$""">> >
+<$wikify name="result" 
+  text="""<$macrocall $name="replace-many-text" 
+     tiddler=<<__tiddler__>>
+     field=<<__field__>> 
+     list=<<__list__>> 
+     flags=<<__flags__>>
+     wholeWords=<<__wholeWords__>> />"""
+  >
+<$diff-text source={{{ [<__tiddler__>get<__field__>] }}} dest=<<result>> cleanup={{$:/state/commander/snr/setting/cleanup}}/>
+</$wikify>
+
+</$list>
+</$list>
+\end
+
+\define replace-many-text-button(tiddler:"", field:"text", list:"", flags:"", wholeWords:"")
+\whitespace trim
+<$list filter="[<__tiddler__>get<__field__>minlength[1]]" variable=null>
+<$list filter="[title<__list__>get[text]minlength[1]]" variable=null>
+<$wikify name="result" 
+  text="""<$macrocall $name="replace-many-text" 
+     tiddler=<<__tiddler__>> 
+     field=<<__field__>> 
+     list=<<__list__>> 
+     flags=<<__flags__>>
+     wholeWords=<<__wholeWords__>> />"""
+  >
+<$reveal type="nomatch" default="title" text=<<__field__>> >
+ <$action-setfield $tiddler=<<__tiddler__>> $field=<<__field__>> $value=<<result>>/>
+</$reveal>
+<$reveal type="match" default="title" text=<<__field__>> >
+ <$action-sendmessage $message="tm-rename-tiddler" from=<<__tiddler__>> to=<<result>> />
+</$reveal>
+</$wikify>
+</$list>
+</$list>
+\end
