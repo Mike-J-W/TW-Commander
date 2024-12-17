@@ -23,12 +23,12 @@ module-type: macro
   */
   exports.run = function(listText, sourceText, flags = "gi", wholeWords = "characters") {
     try {
-      var bracketRegex = /^\[+/;
+      var bracketRegex = /^\[\[/;
       var trimmedListText = listText.replace(bracketRegex, '');
-      bracketRegex = /\]+$/;
+      bracketRegex = /\]\]$/;
       trimmedListText = trimmedListText.replace(bracketRegex, '');
       var revisedText = sourceText;
-      const re = /\s*(?:\*|$)\s*/;  
+      const re = /\s*(?:^\*|\n\*)\s*/;  
       function isNotEmpty(term) {
         return term !== "";
       }

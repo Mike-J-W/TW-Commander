@@ -27,12 +27,12 @@ type: text/vnd.tiddlywiki
 </div>
 
 <div class="item">
-<label>Title of Tiddler with List</label>
+<label>List title</label>
 <$edit-text 
    tiddler="$:/state/commander/snr/snr-list-title" 
    tag="input" 
    default="" 
-   placeholder="list's tiddler title"
+   placeholder="title of the tiddler with the list"
  class="cmd-snr-textbox"/>
 </div>
 <!-- Use relink to update titles -->
